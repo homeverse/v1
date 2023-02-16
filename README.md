@@ -1,1 +1,2 @@
-# v1
+homeverserepo@outlook.com
+WinterIsHere8#

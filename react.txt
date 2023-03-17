@@ -1,0 +1,139 @@
+$ npx create-react-app [ v1 ]
+
+$ rm -r src/*
+
+==================================
+
+$ nano src/index.js :
+
+import React from "react";
+import ReactDOM from "react-dom/client";
+
+const ElementObj = <h1>Hello React!</h1>
+
+const RootObj = ReactDOM.createRoot( document.getElementById( "root" ) );
+RootObj.render( ElementObj );
+
+=================================
+
+// const UserName = "Sajjad" ;
+// const ElementObj = ( <h1 className="[ Class Name ]"> Hello { UserName } !</h1> ) ;
+
+// const ElementObj = ( <h1>{ ( UserName ) == "Sajjad" ? "OK" : "Error" }</h1> );
+
+/*
+const ElementObj = (
+  <div>
+    <h1> Hello Sajjad !</h1>
+  </div>
+);
+*/
+
+/*
+const ElementObj = (
+  <>
+    <p>Line 1</p>
+    <p>Line 2</p>
+  </>
+);
+*/
+
+// const ElementObj = ( <input type="text" /> );
+
+// ComponentName.js :
+
+/*
+function ComponentName() {
+  return ( <h2>XYZ</h2> );
+};
+*/
+
+/*
+function ComponentName( props ) {
+  return ( <h2>{ props.text }</h2> );
+};
+*/
+
+/*
+function ComponentName( props ) {
+  return ( <h2>{ props.Location.Province }</h2> );
+};
+*/
+
+/*
+function ParentComponentName( props ) {
+  const DataObj = { Province : "Tehran" , City : "Rey" , Area : "DowlatAbad" };
+  return (
+    <>
+      <h1>Parent Component DATA</h1>
+      <ComponentName Location={ DataObj }/>
+    </>
+  );
+};
+*/
+
+// https://www.w3schools.com/REACT/react_events.asp
+
+function Football() {
+  const shoot = () => {
+    alert("Great Shot!");
+  }
+
+  return (
+    <button onClick={shoot}>Take the shot!</button>
+  );
+};
+
+// export default ComponentName ;
+
+// index.js :
+// import React from "react";
+// import ReactDOM from "react-dom/client";
+// import ComponentName from './ComponentName.js';
+
+const RootObj = ReactDOM.createRoot( document.getElementById( "root" ) );
+// RootObj.render( ElementObj );
+// RootObj.render( <ComponentName /> );
+// RootObj.render( <ComponentName text="ABC"/> );
+// RootObj.render( <ParentComponentName /> );
+
+
+================================
+
+$ npm start
+
+http://127.0.0.1/3000
+
+============================================
+
+// <button id="LoginButtonID">Login</button>
+
+// document.getElementById( "LoginButtonID" ).addEventListener( "click" , FunctionName() );
+
+// document.getElementById( "[ ID ]" ).innerHTML = "" ;
+
+// window.addEventListener( "load" , FunctionName() );
+
+============================================
+
+import React from "react";
+import ReactDOM from "react-dom/client";
+
+const FilesArray = [ "F1" , "F2" , "F3" ];
+const FilesElements = FilesArray.map( ( File ) => <p>{File}</p> );
+
+ReactDOM.render( FilesElements , document.getElementById( "root" ) );
+
+===========================================
+
+function PCAGenerator() { return [ "Tehran", "Rey" , "DowlatAbad" ] };
+const [ Province , , Area ] = PCAGenerator();
+
+==========================================
+
+const Location = { Province : "Tehran" , City : "Rey" , Area : "DowlatAbad" };
+function DisplayCity( { City } ) { return City };
+
+===========================================
+
+

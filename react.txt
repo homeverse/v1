@@ -1,6 +1,17 @@
-$ npx create-react-app [ v1 ]
 
-$ rm -r src/*
+https://github.com/mui/material-ui/tree/master/examples/material-cra
+https://github.com/mui/material-ui/tree/master/examples/material-next
+
+CRA : src/index.jsx
+Next : pages/index.jsx
+
+$ npm install 
+
+$ npm install @mui/icons-material @mui/x-date-pickers moment-jalaali --save
+
+// @fontsource/roboto
+
+$ npm run dev
 
 ==================================
 
@@ -9,58 +20,47 @@ $ nano src/index.js :
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-const ElementObj = <h1>Hello React!</h1>
+const ElementObj = ( <h1>Hello React!</h1> );
 
 const RootObj = ReactDOM.createRoot( document.getElementById( "root" ) );
 RootObj.render( ElementObj );
 
 =================================
 
-// const UserName = "Sajjad" ;
-// const ElementObj = ( <h1 className="[ Class Name ]"> Hello { UserName } !</h1> ) ;
+const UserName = "Sajjad" ;
+const ElementObj = ( <h1 className="[ Class Name ]"> Hello { UserName } !</h1> ) ;
 
-// const ElementObj = ( <h1>{ ( UserName ) == "Sajjad" ? "OK" : "Error" }</h1> );
+const ElementObj = ( <h1>{ ( UserName ) == "Sajjad" ? "OK" : "Error" }</h1> );
 
-/*
 const ElementObj = (
   <div>
     <h1> Hello Sajjad !</h1>
   </div>
 );
-*/
 
-/*
 const ElementObj = (
   <>
     <p>Line 1</p>
     <p>Line 2</p>
   </>
 );
-*/
 
-// const ElementObj = ( <input type="text" /> );
+const ElementObj = ( <input type="text" /> );
 
-// ComponentName.js :
+ComponentName.js :
 
-/*
 function ComponentName() {
   return ( <h2>XYZ</h2> );
 };
-*/
 
-/*
 function ComponentName( props ) {
   return ( <h2>{ props.text }</h2> );
 };
-*/
 
-/*
 function ComponentName( props ) {
   return ( <h2>{ props.Location.Province }</h2> );
 };
-*/
 
-/*
 function ParentComponentName( props ) {
   const DataObj = { Province : "Tehran" , City : "Rey" , Area : "DowlatAbad" };
   return (
@@ -70,41 +70,34 @@ function ParentComponentName( props ) {
     </>
   );
 };
-*/
 
-// https://www.w3schools.com/REACT/react_events.asp
-
-function Football() {
-  const shoot = () => {
-    alert("Great Shot!");
+function ApartmentForm() {
+  const Submit = ( Data , Event ) => {
+    // Event.type
+    alert( Data );
   }
 
   return (
-    <button onClick={shoot}>Take the shot!</button>
+    <button onClick={ ( Event ) => Submit( "XYZ" , Event ) }>Submit</button>
   );
 };
 
-// export default ComponentName ;
 
-// index.js :
-// import React from "react";
-// import ReactDOM from "react-dom/client";
-// import ComponentName from './ComponentName.js';
+
+export default ComponentName ;
+
+index.js :
+import React from "react";
+import ReactDOM from "react-dom/client";
+import ComponentName from './ComponentName.js';
 
 const RootObj = ReactDOM.createRoot( document.getElementById( "root" ) );
-// RootObj.render( ElementObj );
-// RootObj.render( <ComponentName /> );
-// RootObj.render( <ComponentName text="ABC"/> );
-// RootObj.render( <ParentComponentName /> );
+RootObj.render( ElementObj );
+RootObj.render( <ComponentName /> );
+RootObj.render( <ComponentName text="ABC"/> );
+RootObj.render( <ParentComponentName /> );
 
-
-================================
-
-$ npm start
-
-http://127.0.0.1/3000
-
-============================================
+===================================================================
 
 // <button id="LoginButtonID">Login</button>
 
@@ -119,13 +112,118 @@ http://127.0.0.1/3000
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-const FilesArray = [ "F1" , "F2" , "F3" ];
-const FilesElements = FilesArray.map( ( File ) => <p>{File}</p> );
+function FileComponent( props ) {
+  return <li>{ props.Name }</li>
+};
 
-ReactDOM.render( FilesElements , document.getElementById( "root" ) );
+function ParentComponentName() {
+  const FilesArray = [
+  { id : 1 , Name : 'F1' } ,
+  { id : 2 , Name : 'F2'  } ,
+  { id : 3 , Name : 'F3' } ,
+  ];
+  return (
+    <>
+      <h1>Files : </h1>
+      <ul>
+        { FilesArray.map( ( File ) => <FileComponent key={ File.id } Name={ File.Name }/> ) }
+      </ul>
+    </>
+  );
+};
+const RootObj = ReactDOM.createRoot( document.getElementById( "root" ) );
+RootObj.render( <ParentComponentName /> );
+
+// ReactDOM.render( FilesElements , document.getElementById( "root" ) );
+===========================================
+function ApartmentForm() {
+    const [ Province , UpdateProvince ] = useState( "" );
+    const [ City , UpdateCity ] = useState( "" );
+
+    const Submit = ( Event ) => {
+        Event.preventDefault();
+        alert( `Province : ${ Province } , City : ${ City }` );
+    };
+    return (
+        <>
+        <form onSubmit={ Submit } >
+            <label>Province :
+                <input type="text" value={ Province } onChange={ ( Event ) => UpdateProvince( Event.target.value ) } />
+            </label>
+            <label>City :
+                <input type="text" value={ City } onChange={ ( Event ) => UpdateCity( Event.target.value ) } />
+            </label>
+            <input type="submit" />
+        </form>
+        </>
+    );
+};
+===========================================
+function ApartmentForm() {
+    const [ Province , UpdateProvince ] = useState( "" );
+    const [ City , UpdateCity ] = useState( "" );
+    const [ Area , UpdateArea ] = useState( "" );
+
+    const Submit = ( Event ) => {
+        Event.preventDefault();
+        const Apartment = {
+            Province : Province ,
+            City : City ,
+            Area : Area ,
+        };
+        alert( `Province : ${ Apartment.Province } , City : ${ Apartment.City } , Area : ${ Apartment.Area }` );
+    };
+    return (
+        <>
+        <form onSubmit={ Submit } >
+            <h1>Province :</h1>
+            <input type="text" value={ Province } onChange={ ( Event ) => UpdateProvince( Event.target.value ) } />
+            <h1>City :</h1>
+            <input type="text" value={ City } onChange={ ( Event ) => UpdateCity( Event.target.value ) } />
+            <h1>Area :</h1>
+            <input type="text" value={ Area } onChange={ ( Event ) => UpdateArea( Event.target.value ) } />
+            <div>
+                <input type="submit" />
+            </div>
+        </form>
+        </>
+    );
+};
+===========================================
+import React , { useState } from "react" ;
+import ReactDOM from "react-dom/client" ;
+
+function ApartmentForm() {
+    const [ Apartment , UpdateApartment ] = useState( {} );
+
+    const HandleChange = ( Event ) => {
+        const Name = Event.target.name ;
+        const Value = Event.target.value ;
+        UpdateApartment( ( Values ) => ( { ...Values , [ Name ]: Value } ) );
+    };
+
+    const HandleSubmit = ( Event ) => {
+        Event.preventDefault();
+        console.log( Apartment );
+    };
+    return (
+        <>
+        <form onSubmit={ HandleSubmit } >
+            <h1>Province :</h1>
+            <input type="text" name="ProvinceName" value={ Apartment.ProvinceName } onChange={ HandleChange } />
+            <h1>City :</h1>
+            <input type="text" name="CityName" value={ Apartment.CityName } onChange={ HandleChange } />
+            <br></br>
+            <input type="submit" />
+        </form>
+        </>
+    );
+};
+
+const RootObj = ReactDOM.createRoot( document.getElementById( "root" ) );
+RootObj.render( <ApartmentForm /> );
 
 ===========================================
-
 function PCAGenerator() { return [ "Tehran", "Rey" , "DowlatAbad" ] };
 const [ Province , , Area ] = PCAGenerator();
 
@@ -135,5 +233,540 @@ const Location = { Province : "Tehran" , City : "Rey" , Area : "DowlatAbad" };
 function DisplayCity( { City } ) { return City };
 
 ===========================================
+
+// import React , { useState } from "react" ;
+// import ReactDOM from "react-dom/client" ;
+
+/*
+
+function ApartmentForm() {
+    const [ Apartment , UpdateApartment ] = useState( {} );
+
+    const HandleChange = ( Event ) => {
+        const Name = Event.target.name ;
+        const Value = Event.target.value ;
+        UpdateApartment( ( Values ) => ( { ...Values , [ Name ]: Value } ) );
+    };
+
+    const HandleSubmit = ( Event ) => {
+        Event.preventDefault();
+        console.log( Apartment );
+    };
+    return (
+        <>
+        <form onSubmit={ HandleSubmit } >
+            <h1>Province :</h1>
+            <input type="text" name="ProvinceName" value={ Apartment.ProvinceName } onChange={ HandleChange } />
+            <h1>City :</h1>
+            <input type="text" name="CityName" value={ Apartment.CityName } onChange={ HandleChange } />
+            <br></br>
+            <input type="submit" />
+        </form>
+        </>
+    );
+};
+
+const RootObj = ReactDOM.createRoot( document.getElementById( "root" ) );
+RootObj.render( <ApartmentForm /> );
+
+*/
+==============================================================================
+
+==============================================================
+
+import React from "react";
+import ReactDOM from "react-dom/client";
+
+// const ElementObj = ( <h1>Hello React!</h1> );
+
+/*
+import Button from "@mui/material/Button";
+import PublishIcon from '@mui/icons-material/Publish';
+https://mui.com/material-ui/material-icons/
+return <Button variant="contained" color="success" size="medium" startIcon={<PublishIcon />}>Submit</Button> ;
+return <Button variant="contained" color="success" size="medium" endIcon={<PublishIcon />}>Submit</Button> ;
+const HandleSubmit = () => {
+    console.log( "Hello" );
+};
+return <Button variant="contained" color="success" onClick={ HandleSubmit }>Submit</Button> ;
+
+function UploadImages() {
+    return(
+        <Button variant="contained" component="label" color="info">
+            Upload
+            <input hidden accept="image/*" multiple type="file" />
+        </Button>
+    );
+};
+
+===================================================================
+
+import React , { useState } from "react" ;
+import ReactDOM from "react-dom/client";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+
+
+function ApartmentForm() {
+
+    const ProvinceNames = [ "Tehran" , "Alborz" ];
+    const [ SelectedProvinceName , SelectProvince ] = useState( "" );
+    
+    const HandleChange = ( MyEvent ) => {
+        SelectProvince( MyEvent.target.value );
+    };
+    
+    return (
+        <>
+        <h1>{ SelectedProvinceName }</h1>
+        <FormControl fullWidth>
+            <InputLabel id="ProvinceSelectLabel">Province</InputLabel>
+            <Select
+            labelId="ProvinceSelectLabel"
+            id="ProvinceSelectID"
+            value={ SelectedProvinceName }
+            label="Province"
+            onChange={ HandleChange }
+            >
+                { ProvinceNames.map( ( ProvinceName ) => { return <MenuItem value={ ProvinceName }>{ ProvinceName }</MenuItem> } ) }
+            </Select>
+        </FormControl>
+        </>
+    );
+};
+
+const RootObj = ReactDOM.createRoot( document.getElementById( "root" ) );
+RootObj.render( <ApartmentForm /> );
+
+================================================
+
+import React , { useState } from "react" ;
+import ReactDOM from "react-dom/client";
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+
+function Add() {
+
+    const Add = () => {
+        console.log( "ADD" );
+    };
+
+    return(
+        <Fab size="medium" color="secondary" aria-label="add" onClick={ () => { Add() } }>
+            <AddIcon />
+        </Fab>
+    );
+
+};
+
+const RootObj = ReactDOM.createRoot( document.getElementById( "root" ) );
+RootObj.render( <Add /> );
+
+================================================
+
+import React , { useState } from "react" ;
+import ReactDOM from "react-dom/client";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+
+function CheckboxLabels() {
+
+    // use !ElevatorChecked , !ParkingChecked for Graphql
+
+    const [ ElevatorChecked , UpdateElevator ] = useState( false );
+    const [ ParkingChecked , UpdateParking ] = useState( false );
+
+    return (
+    <FormGroup>
+        <FormControlLabel control={
+        <Checkbox
+        checked={ ElevatorChecked }
+        onChange={ ( event ) => { UpdateElevator( event.target.checked ); } }
+        />}
+        label="Elevator"
+        />
+        <FormControlLabel control={
+        <Checkbox
+        checked={ ParkingChecked }
+        onChange={ ( event ) => { UpdateParking( event.target.checked ); } }
+        />}
+        label="Parking"
+        />
+    </FormGroup>
+    );
+};
+
+const RootObj = ReactDOM.createRoot( document.getElementById( "root" ) );
+RootObj.render( <CheckboxLabels /> );
+
+============================================================
+
+import React , { useState } from "react" ;
+import ReactDOM from "react-dom/client" ;
+import Slider from "@mui/material/Slider" ;
+
+function RentFile() {
+    const [ MyValue , MySetValue ] = useState( 50 );
+
+    return (
+        <>
+        <h1>{ MyValue }</h1>
+        <Slider aria-label="MonthlyDepositSlider" value={ MyValue } marks={ true } step={ 10 } color="secondary" onChange={ ( MyEvent , MyUpdatedValue ) => { MySetValue( MyUpdatedValue ) } } />
+        </>
+    );
+};
+
+const RootObj = ReactDOM.createRoot( document.getElementById( "root" ) );
+RootObj.render( <RentFile /> );
+
+============================================================
+
+/*
+
+import React , { useState } from "react" ;
+import ReactDOM from "react-dom/client" ;
+import TextField from "@mui/material/TextField";
+
+import FormControl from "@mui/material/FormControl";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import FilledInput from '@mui/material/FilledInput';
+import InputLabel from "@mui/material/InputLabel" ;
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
+<FormControl variant="outlined">
+    <InputLabel>Password</InputLabel>
+    <OutlinedInput
+    value={ Password }
+    onChange={ ( MyEvent ) => { UpdatePassword( MyEvent.target.value ) } }
+    id="PasswordID"
+    type={ ShowPassword ? "text" : "Password" }
+    endAdornment={
+    <InputAdornment position="end">
+        <IconButton
+        onClick={ HandleShowPassword }
+        onMouseDown={ HandleHidePassword }
+        edge="end"
+        >
+            { ShowPassword ? <VisibilityOff /> : <Visibility /> }
+        </IconButton>
+    </InputAdornment>
+    }
+    label="Password"
+    />
+</FormControl>
+
+
+
+function Form() {
+    const [ Password , UpdatePassword ] = useState( "" );
+    const [ ShowPassword , SetShowPassword ] = useState( false );
+    // variant="filled" , "outlined"
+    // inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+    // color="secondary"
+    // <TextField fullWidth required margin="normal" id="NotesID" label="Notes" variant="filled" value={ Notes } onChange={ ( MyEvent ) => { UpdateNotes( MyEvent.target.value ) } } />
+
+    const HandleShowPassword = () => SetShowPassword( ( Show ) => !Show );
+
+    const HandleHidePassword = ( MyEvent ) => {
+        MyEvent.preventDefault();
+    };
+
+    return(
+        <>
+        <h1>{ Password }</h1>
+        <FormControl variant="filled">
+            <InputLabel>Password</InputLabel>
+            <FilledInput
+            value={ Password }
+            onChange={ ( MyEvent ) => { UpdatePassword( MyEvent.target.value ) } }
+            id="PasswordID"
+            type={ ShowPassword ? "text" : "Password" }
+            endAdornment={
+            <InputAdornment position="end">
+                <IconButton
+                onClick={ HandleShowPassword }
+                onMouseDown={ HandleHidePassword }
+                edge="end"
+                >
+                    { ShowPassword ? <VisibilityOff /> : <Visibility /> }
+                </IconButton>
+            </InputAdornment>
+            }
+            label="Password"
+            />
+        </FormControl>
+        </>
+    );
+};
+
+
+const RootObj = ReactDOM.createRoot( document.getElementById( "root" ) );
+RootObj.render( <Form /> );
+
+*/
+
+========================================================
+
+
+import React , { useState } from "react" ;
+import ReactDOM from "react-dom/client" ;
+import Rating from "@mui/material/Rating";
+
+function UX() {
+    const [ UR , UpdateUR ] = useState( 0 );
+    return(
+    <>
+    <h1>{ UR }</h1>
+    <Rating
+    value={ UR }
+    onChange={ ( MyEvent , InputValue ) => { UpdateUR( InputValue ) } }
+    />
+    </>
+    );
+};
+
+const RootObj = ReactDOM.createRoot( document.getElementById( "root" ) );
+RootObj.render( <UX /> );
+
+=====================================================
+
+import React , { useState } from "react" ;
+import ReactDOM from "react-dom/client" ;
+import Avatar from "@mui/material/Avatar" ;
+import XImage from "./x.png" ;
+
+function FS() {
+    return <Avatar variant="square" src={ XImage } />
+};
+
+const RootObj = ReactDOM.createRoot( document.getElementById( "root" ) );
+RootObj.render( <FS /> );
+
+======================================================
+
+
+// npm install @mui/x-date-pickers moment-jalaali
+
+import React , { useState } from "react" ;
+import ReactDOM from "react-dom/client" ;
+
+import { DatePicker } from "@mui/x-date-pickers/DatePicker" ;
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider" ;
+import { AdapterMomentJalaali } from "@mui/x-date-pickers/AdapterMomentJalaali" ;
+import moment from "moment-jalaali" ;
+
+
+function PersianDatePicker() {
+    const [ InputDate , UpdateInputDate ] = useState( null );
+
+    const UpdateReservedDate = ( SelectedDate ) => {
+        UpdateInputDate( SelectedDate ) ;
+        const UnixDate = Date.parse( moment( SelectedDate ).format( "MM-DD-YYYY" ) );
+        console.log( UnixDate );
+    };
+    // <h1>{ ReservedDate }</h1>
+    return (
+        <>
+        <LocalizationProvider dateAdapter={ AdapterMomentJalaali }>
+            <DatePicker
+            label="Reserve Date"
+            slotProps={ { textField : { variant: "filled" } } }
+            value={ InputDate }
+            onChange={ UpdateReservedDate }
+            />
+        </LocalizationProvider>
+        </>
+    );
+};
+
+const RootObj = ReactDOM.createRoot( document.getElementById( "root" ) );
+RootObj.render( <PersianDatePicker /> );
+
+
+==========================================================
+
+
+import React , { useState } from "react" ;
+import ReactDOM from "react-dom/client" ;
+
+import List from "@mui/material/List" ;
+import ListItem from "@mui/material/ListItem" ;
+import ListItemButton from "@mui/material/ListItemButton" ;
+import ListItemText from "@mui/material/ListItemText" ;
+import ListItemAvatar from "@mui/material/ListItemAvatar" ;
+import Avatar from "@mui/material/Avatar" ;
+
+import F1Pic from "./images/1-Black.png" ;
+import F2Pic from "./images/2-Black.png" ;
+import F3Pic from "./images/3-Black.png" ;
+
+
+function MainPage() {
+
+    const FileObjects = [
+        {
+            Picture : F1Pic ,  
+            Title : "1" ,
+            Price : "1000000000"
+        } ,
+        {
+            Picture : F2Pic ,
+            Title : "2" ,
+            Price : "2000000000"
+        } ,
+        {
+            Picture : F3Pic ,
+            Title : "3" ,
+            Price : "3000000000"
+        }
+    ];
+
+    const [ SelectedFileIndex , UpdateSelectedFileIndex ] = React.useState( 0 );
+
+    const HandleFileSelect = ( MyEvent , FileIndex ) => {
+        UpdateSelectedFileIndex( FileIndex );
+    };
+
+    return(
+        <>
+        <h1>{ SelectedFileIndex }</h1>
+        <List>
+            { FileObjects.map( ( FileObj ) => {
+                const FileIndex = FileObjects.indexOf( FileObj );
+                return(
+                    <ListItem>
+                        <ListItemButton selected={ SelectedFileIndex === FileIndex } onClick={ ( MyEvent ) => { HandleFileSelect( MyEvent , FileIndex ) } } >
+                            <ListItemAvatar>
+                                <Avatar src={ FileObj.Picture }></Avatar>
+                            </ListItemAvatar>
+                            <ListItemText variant="square" primary={ FileObj.Title } secondary={ FileObj.Price } />
+                        </ListItemButton>
+                    </ListItem>
+                );
+            } ) }
+        </List>
+        </>
+    );
+};
+
+const RootObj = ReactDOM.createRoot( document.getElementById( "root" ) );
+RootObj.render( <MainPage /> );
+
+==============================================
+
+pages/aboutus.jsx :
+
+export default function AboutUS() {
+    return( <h1>About us</h1> );
+};
+
+pages/index.jsx :
+
+import Link from "next/link" ;
+function AboutUsLink() {
+    return( <h1><Link href="/aboutus">Aboutus Link</Link></h1> );
+};
+
+==================================================
+==================================================
+==================================================
+
+Next JS :
+
+
+import { useState } from "react" ;
+import Head from "next/head" ;
+
+import List from "@mui/material/List" ;
+import ListItem from "@mui/material/ListItem" ;
+import ListItemButton from "@mui/material/ListItemButton" ;
+import ListItemText from "@mui/material/ListItemText" ;
+import ListItemAvatar from "@mui/material/ListItemAvatar" ;
+
+import Image from "next/image" ;
+import F1Pic from "../public/1-Black.png" ;
+import F2Pic from "../public/2-Black.png" ;
+import F3Pic from "../public/3-Black.png" ;
+
+import { NextLinkComposed } from "../src/Link" ;
+
+function Apartments( { ApartmentsList } ) {
+    
+    // const [ SelectedFileIndex , UpdateSelectedFileIndex ] = useState();
+    // <h1>{ SelectedFileIndex }</h1>
+    // const FileIndex = ApartmentsList.indexOf( FileObj );
+    // <ListItemButton selected={ SelectedFileIndex === FileIndex } onClick={ ( MyEvent ) => { HandleFileSelect( MyEvent , FileIndex ) } } >
+
+    /*
+    const HandleFileSelect = ( MyEvent , FileIndex ) => {
+        UpdateSelectedFileIndex( FileIndex );
+    };
+    */
+
+    return(
+        <List>
+            { ApartmentsList.map( ( FileObj ) => {
+                return(
+                    <ListItem>
+                        <ListItemButton component={ NextLinkComposed } to={ { pathname : "/file" , query: { ID : "FFFF" } , } } >
+                            <ListItemAvatar>
+                                <Image src={ FileObj.Picture } />
+                            </ListItemAvatar>
+                            <ListItemText variant="square" primary={ FileObj.Title } secondary={ FileObj.Price } />
+                        </ListItemButton>
+                    </ListItem>
+                );
+            } ) }
+        </List>
+    );
+
+};
+
+export default function MainPage() {
+
+    const ApartmentsList = [
+        {
+            Picture : F1Pic ,
+            Title : "1" ,
+            Price : "1000000000"
+        } ,
+        {
+            Picture : F2Pic ,
+            Title : "2" ,
+            Price : "2000000000"
+        } ,
+        {
+            Picture : F3Pic ,
+            Title : "3" ,
+            Price : "3000000000"
+        }
+    ];
+
+    return(
+        <>
+        <Head>
+            <meta name="viewport" content="initial-scale=1, width=device-width" />
+        </Head>
+        <div>
+            <Apartments ApartmentsList={ ApartmentsList } />
+        </div>
+        </>
+    );
+
+};
+
+
+===================================================================
+==============================================================
+==================================================================
+
+
+
 
 

@@ -1,4 +1,3 @@
-
 https://github.com/mui/material-ui/tree/master/examples/material-cra
 https://github.com/mui/material-ui/tree/master/examples/material-next
 
@@ -766,7 +765,300 @@ export default function MainPage() {
 ==============================================================
 ==================================================================
 
+SSG :
+
+$ next build
+
+// https://nextjs.org/docs/basic-features/pages#static-generation-with-data
+
+// https://next-learn-starter.vercel.app/
 
 
+SSG :
+
+export default function HomePageComponent( { data } ) { // data.xyz };
+
+export async function getStaticProps() {
+    const Result = await fetch( "https://[ ]/" );
+    const data = await Result.json();
+    return {
+        props: { data } ,
+    };
+};
 
 
+====================
+SSR :
+
+export async function getServerSideProps( context ) {
+    return {
+        props: {} ,
+    };
+}
+
+===================
+
+Dynamic Routes :
+
+/pages/file/[FileID].js
+
+export default function FilePage( { data } ) {
+    return <h1>data.xyz</h1> ;
+};
+
+export async function getStaticPaths() {
+    const Result = await fetch( "https://[ ]/FileIDs" );
+    const data = await Result.json();
+    const FileIDsArray = data.FileIDsArray ;
+
+    // return FileIDsArray.map( ( ThisFileID ) => {
+    const FilePathsArray = FileIDsArray.map( ( ThisFileID ) => {
+        return {
+            params: {
+                FileID : ThisFileID ,
+            } ,
+        };
+    });
+
+    return {
+        FilePathsArray ,
+        fallback : false ,
+    };
+};
+
+export async function getStaticProps( { params } ) {
+    const FileID = params.FileID ;
+    const Result = await fetch( "https://[ ]/" + FileID );
+    const data = await Result.json();
+    return {
+        props: { data } ,
+    };
+};
+
+=================
+
+$ npm init -y
+
+$ npm install @apollo/server graphql typescript @types/node --save
+
+$ npx tsc --init
+
+npx tsc index.ts
+node index.js
+
+const { ApolloServer } = require( "@apollo/server" );
+const { startStandaloneServer } = require( "@apollo/server/standalone" );
+
+/*
+        ID: Int!
+        Price: Int!
+        Parking: Boolean!
+        Notes: String!
+*/
+
+const typeDefs = `#graphql
+    type Apartment {
+        ID: ID!
+        Title: String!
+        Price: Int!
+    }
+    type Query {
+        Apartments: [Apartment!]!
+    }
+`;
+
+/*
+
+const ApartmentsCollection = [
+    {
+        ID: 1 ,
+        Price: 100 ,
+        Parking: true ,
+        Notes: "ABC" ,
+    },
+    {
+        ID: 2 ,
+        Price: 200 ,
+        Parking: false ,
+        Notes: "XYZ" ,
+    },
+];
+
+*/
+
+const ApartmentsCollection = [
+    {
+        ID: 1 ,
+        Title : "1" ,
+        Price: 100 ,
+    },
+    {
+        ID: 2 ,
+        Title : "2" ,
+        Price: 200 ,
+    },
+];
+
+const resolvers = {
+    Query: {
+        Apartments: () => { return ApartmentsCollection } ,
+    },
+};
+
+async function StartGraphQLApi( Port : number ) {
+    const GraphQLApi = new ApolloServer( { typeDefs , resolvers } );
+    const { url } = await startStandaloneServer( GraphQLApi , { listen: { port: Port } });
+    console.log( url );
+};
+
+StartGraphQLApi( 4000 );
+
+---------------------
+
+$ npm init -y
+$ npm install graphql @apollo/client --save
+
+$ npm run dev 
+
+index.jsx :
+
+import { ApolloClient, InMemoryCache, ApolloProvider , gql , useQuery } from "@apollo/client" ;
+
+import Head from "next/head" ;
+
+import List from "@mui/material/List" ;
+import ListItem from "@mui/material/ListItem" ;
+import ListItemButton from "@mui/material/ListItemButton" ;
+import ListItemText from "@mui/material/ListItemText" ;
+
+import { NextLinkComposed } from "../src/Link" ;
+
+function ApartmentsListComponent( { ApartmentsList } ) {
+
+    return(
+        <List>
+            { ApartmentsList.map( ( ApartmentObj ) => {
+                return(
+                    <ListItem>
+                        <ListItemButton component={ NextLinkComposed } to={ { pathname : ( "/file/" + ApartmentObj.ID ) } } >
+                            <ListItemText variant="square" primary={ ApartmentObj.Title } secondary={ ApartmentObj.Price } />
+                        </ListItemButton>
+                    </ListItem>
+                );
+            } ) }
+        </List>
+    );
+
+};
+
+function FilesComponent() {
+
+    const ApartmentsQuery = gql`
+        query GetApartments {
+            Apartments {
+                ID
+                Title
+                Price
+            }
+        }
+    `;
+
+    const { loading , error , data } = useQuery( ApartmentsQuery );
+
+    if( loading ) { return <h1> ... Loading Spinner Component ... </h1> };
+    if( data ) { return <ApartmentsListComponent ApartmentsList={ data.Apartments } /> };
+
+};
+
+export default function LandingPage() {
+
+    const GraphQLClient = new ApolloClient({
+        uri: "http://localhost:4000" ,
+        cache: new InMemoryCache() ,
+    });
+
+    return(
+        <>
+        <Head>
+            <meta name="viewport" content="initial-scale=1, width=device-width" />
+        </Head>
+        <div>
+            <ApolloProvider client={ GraphQLClient }>
+                <FilesComponent/>
+            </ApolloProvider>
+        </div>
+        </>
+    );
+
+};
+
+====================
+
+const typeDefs = gql`
+    type Apartment {
+        id: ID!
+        Price: Int!
+        Parking: Boolean!
+        Notes: String!
+    }
+    type Query {
+        Apartments: [Apartment!]!
+        ApartmentFile( id: ID! ): Apartment
+    }
+    type FileInsertResponse {
+        Success: Boolean!
+        Message: String
+    }
+    type Mutation {
+        Login( PhoneNumber: String! ): LoginResponse
+        InsertApartment( ApartmentObj: Apartment! ): FileInsertResponse!
+        DeleteApartment( ApartmentID : ID! ): FileDeleteResponse!
+    }
+`;
+
+const ApartmentsCollection = [
+    {
+        ID: 1 ,
+        Price: 100 ,
+        Parking: true ,
+        Notes: "ABC" ,
+    },
+    {
+        ID: 2 ,
+        Price: 200 ,
+        Parking: false ,
+        Notes: "XYZ" ,
+    },
+];
+
+const resolvers = {
+    Query: {
+        Apartments: () => { return ApartmentsCollection } ,
+    },
+};
+
+
+// introspection: false ????
+
+query GetApartments {
+    Apartments {
+        id
+        Price
+    }
+}
+
+mutation AddApartment {
+    InsertApartment(
+    id: "3" ,
+    Price: 300 ,
+    Parking: true ,
+    Notes: "EFG" ,
+    ) {
+        id
+        Price
+        Parking
+        Notes
+    }
+}
+
+============================================
